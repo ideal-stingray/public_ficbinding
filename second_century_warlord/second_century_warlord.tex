@@ -1,0 +1,435 @@
+% universal settings
+\documentclass[smalldemyvopaper,11pt,twoside,onecolumn,openany,extrafontsizes]{memoir}
+
+% note: i just copy/pasted this .tex file from a different danmei
+% typesetting project, so there's a lot of preamble cruft that
+% isn't really relevant to this project.
+
+% PACKAGE DEFINITION
+% typographical packages
+\usepackage{microtype} % for micro-typographical adjustments
+\usepackage{setspace} % for line spacing
+\usepackage{lettrine} % for drop caps and awesome chapter beginnings
+\usepackage{titlesec} % for manipulation of chapter titles
+
+\usepackage{type1cm}
+\usepackage{titling}
+\usepackage{fontspec}
+\usepackage{newunicodechar}
+\usepackage{tocloft}
+\usepackage{ragged2e}
+\usepackage[UTF8]{ctex}
+\usepackage{xeCJK}
+\usepackage{etoolbox}
+\usepackage{environ}
+\usepackage{needspace}
+
+\setmainfont{Baskerville}[
+  SmallCapsFont={Baskerville Small Caps SSi},
+  SmallCapsFeatures={Letters=SmallCaps},
+]
+\setCJKmonofont{Noto Sans SC Light}
+\setCJKsansfont{Noto Sans SC Light}
+\setmonofont{Noto Sans Mono}
+\newfontfamily{\dropcaps}{Zallman Caps}
+
+\def\CJKmovesymbol#1{\lower0.15em\hbox{#1}}
+\def\CJKmove{\let\CJKsymbol\CJKmovesymbol
+             \let\CJKpunctsymbol\CJKmovesymbol}
+
+\newcommand{\nicecjk}[1]{\textsf{\CJKmove{#1}}}
+
+\makeatletter                                                                   
+\newcommand\pinyin[1]{\begingroup \language=\l@pinyin #1\endgroup}              
+\makeatother
+
+\usepackage{url}
+\usepackage{relsize}
+
+% other
+\usepackage{calc}
+\usepackage{hologo}
+\usepackage[hidelinks]{hyperref}
+%\usepackage{showframe}
+\usepackage{sepfootnotes}
+\usepackage{amssymb}
+
+% PHYSICAL DOCUMENT SETUP
+% media settings
+\setstocksize{5.675in}{4.375in}
+\settrimmedsize{5.5in}{4.25in}{*}
+\setbinding{0.175in}
+\setlrmarginsandblock{0.5in}{0.5in}{*}
+\setulmarginsandblock{0.6in}{0.6in}{*}
+
+% defining the title and the author
+\title{My First Sixteen Days as a Second Century Warlord}
+\author{tumblr user romanceyourdemons}
+\newcommand{\press}{Alpaca Laboratories Press}
+
+% custom second title page
+\makeatletter
+\newcommand*\halftitlepage{\begingroup % Misericords, T&H p 153
+  \setlength\drop{0.1\textheight}
+  \begin{center}
+  \vspace*{\drop}
+  \rule{\textwidth}{0in}\par
+  {\Large\thetitle\par}
+  \rule{\textwidth}{0in}\par
+  \vfill
+  \end{center}
+\endgroup}
+\makeatother
+
+% custom title page
+\thispagestyle{empty}
+\makeatletter
+\newlength\drop
+\newcommand*\titleM{\begingroup % Misericords, T&H p 153
+  \setlength\drop{0.15\textheight}
+  \begin{center}
+  \vspace*{\drop}
+  \rule{\textwidth}{0in}\par
+  {\HUGE\thetitle\par}
+  \rule{\textwidth}{0in}\par
+  {\Large\textit\theauthor\par}
+  \vfill
+  {\Large\scshape\press}
+  \end{center}
+\endgroup}
+\makeatother
+
+\renewcommand*\thechapter{\ifnum\value{chapter}<10 0\fi\arabic{chapter}}
+
+\chapterstyle{dash}
+\setlength{\beforechapskip}{0\onelineskip}
+\setlength{\afterchapskip}{2\onelineskip}
+
+\newcommand{\dotbreak}{%
+  \fancybreak{$\cdot$ $\cdot$ $\cdot$}%
+}
+
+% typographical settings for the body text
+\linespread{1.09}
+
+% HEADER AND FOOTER MANIPULATION
+  % for normal pages
+  \nouppercaseheads
+  \headsep = 0.4in
+  \makepagestyle{mystyle} 
+  \setlength{\headwidth}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}
+  \makerunningwidth{mystyle}{\headwidth}
+  \makeevenhead{mystyle}{}{}{}
+  \makeoddhead{mystyle}{}{}{}
+  \makeevenfoot{mystyle}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  \makeoddfoot{mystyle}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  %\makeevenhead{mystyle}{}{\textsf{\scriptsize\scshape\thetitle}}{}
+  %\makeoddhead{mystyle}{}{\textsf{\scriptsize\scshape\leftmark}}{}
+  %\makeevenfoot{mystyle}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  %\makeoddfoot{mystyle}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  \makeatletter
+  \makepsmarks{mystyle}{%
+  \createmark{chapter}{left}{nonumber}{\@chapapp\ }{.\ }}
+  \makeatother
+  % for pages where chapters begin
+  \makepagestyle{plain}
+  \makerunningwidth{plain}{\headwidth}
+  \makeevenfoot{plain}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  \makeoddfoot{plain}{}{\textsf{\scriptsize\scshape\thepage}}{}
+  \pagestyle{mystyle}
+% END HEADER AND FOOTER MANIPULATION
+
+% table of contents customisation
+\renewcommand\contentsname{\normalfont\scshape Contents}
+\renewcommand\cftchapterfont{\normalfont}
+\renewcommand{\cftchapterpagefont}{\normalfont}
+\renewcommand{\printtoctitle}{\centering\Huge}
+
+\newlength{\mylen}   % a "scratch" length
+\setlength{\mylen}{0.5em}   % need some extra space at end of number
+\settowidth{\mylen}{\bfseries\cftchapterpresnum\cftchapteraftersnum} % extra space
+\addtolength{\cftchapternumwidth}{1.2em} % add the extra space
+\renewcommand{\cftchapteraftersnum}{\, $\cdot$}
+
+\emergencystretch 3em
+\hfuzz .5pt
+
+% layout check and fix
+\checkandfixthelayout
+\fixpdflayout
+
+\renewcommand*{\UrlFont}{\ttfamily\smaller\relax}
+
+\renewcommand{\precisfont}{\small\normalfont\itshape}
+\renewenvironment{quote}%
+  {\list{}{\leftmargin=0.4in\rightmargin=-0.4in}\item[]}%
+  {\endlist}
+\AtBeginEnvironment{quote}{\itshape}
+
+\newsavebox{\saveblock}
+\NewEnviron{newpageblock}{%
+  \par
+  \addvspace{.5\baselineskip}%
+  \begin{lrbox}{\saveblock}
+    \begin{minipage}{\linewidth}
+      \BODY
+    \end{minipage}
+  \end{lrbox}%
+  \Needspace{\dimexpr\ht\saveblock+\dp\saveblock}%
+  \BODY
+}
+
+\newsavebox{\ansaveblock}
+\NewEnviron{authornote}{
+  \vspace{10pt}%
+  \begin{lrbox}{\ansaveblock}
+  \begin{minipage}{\linewidth-1.0in}
+  \BODY
+  \end{minipage}
+  \end{lrbox}%
+  \Needspace{\dimexpr\ht\ansaveblock+\dp\ansaveblock}%
+
+  \noindent \hspace{0.2in}
+  \textit{The author has something to say ---}
+  \vspace{-8pt}
+  \def\FrameCommand{
+    \hspace{0.4in}
+    {\vrule width 0.5pt}
+    \hspace{2pt}
+  }
+  \MakeFramed{\advance\hsize-\width\FrameRestore}
+  \begin{adjustwidth}{5pt}{5pt}
+  \vspace{-2pt}
+  \BODY
+  \vspace{2pt}
+  \end{adjustwidth}
+  \endMakeFramed
+}
+
+\newsavebox{\tlsaveblock}
+\NewEnviron{tlnote}{
+  \begin{lrbox}{\tlsaveblock}
+  \begin{minipage}{\linewidth-1.0in}
+  \BODY
+  \end{minipage}
+  \end{lrbox}%
+  \Needspace{\dimexpr\ht\tlsaveblock+\dp\tlsaveblock}%
+
+  \noindent \hspace{0.2in}
+  \textit{Translator's note ---}
+  \vspace{-10pt}
+  \def\FrameCommand{
+    \hspace{0.4in}
+    {\vrule width 0.5pt}
+    \hspace{2pt}
+  }
+  \MakeFramed{\advance\hsize-\width\FrameRestore}
+  \begin{adjustwidth}{5pt}{5pt}
+  \vspace{-2pt}
+  \BODY
+  \vspace{2pt}
+  \end{adjustwidth}
+  \endMakeFramed
+}
+\AtBeginEnvironment{tlnote}{\itshape}
+
+\newsavebox{\edsaveblock}
+\NewEnviron{ednote}{
+  \begin{lrbox}{\edsaveblock}
+  \begin{minipage}{\linewidth-1.0in}
+  \BODY
+  \end{minipage}
+  \end{lrbox}%
+  \Needspace{\dimexpr\ht\edsaveblock+\dp\edsaveblock}%
+
+  \noindent \hspace{0.2in}
+  \textit{Editor's note ---}
+  \vspace{-10pt}
+  \def\FrameCommand{
+    \hspace{0.4in}
+    {\vrule width 0.5pt}
+    \hspace{2pt}
+  }
+  \MakeFramed{\advance\hsize-\width\FrameRestore}
+  \begin{adjustwidth}{5pt}{5pt}
+  \vspace{-2pt}
+  \BODY
+  \vspace{2pt}
+  \end{adjustwidth}
+  \endMakeFramed
+}
+\AtBeginEnvironment{ednote}{\itshape}
+
+
+% BEGIN THE DOCUMENT
+\begin{document}
+\pagestyle{empty}
+% the half title page
+\halftitlepage
+\cleardoublepage
+% the title page
+\titleM
+\clearpage
+% copyright page
+\begin{center}
+\vfill
+Published by \press, 2023
+\end{center}
+
+\medskip
+
+Originally published on tumblr.com at \\
+\url{romanceyourdemons.tumblr.com/post/706591865612451840}
+
+\vfill
+\clearpage
+
+% begin front matter
+\frontmatter
+\pagestyle{mystyle}
+\tableofcontents*
+\mainmatter
+
+\chapter{first day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, have my men} tie branches to their
+horses' tails to stir up dust and make it look like there's a lot of us but i
+forget it just rained so there isn't any dust and the enemy can clearly see
+there's like twenty of us all spread out in a line
+
+\chapter{second day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, bribe a bunch} of kids to start
+singing a nursery rhyme i carefully crafted to spread misinformation and further
+my strategic ends but they change the lyrics to be about poop and the enemy
+isn't misdirected at all
+
+\chapter{third day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, lure my enemy} into a narrow
+valley and send a team of archers to shoot them from the high ground but there
+was a feral hog napping on the trail up to the overlook and they couldn't
+decide whether to try and shoot it or just go around and by the time the hog
+woke up and left on its own the enemy had already passed safely below
+
+\chapter{fourth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,slope=-3pt,findent=-2pt]{\dropcaps{w}}{e attempt to} join a battle on
+the side of the guy we want to ally with but he and the guy he's fighting
+have really similar names and it's finally dusty and i misread the standards
+and attack the wrong guy.  so now we're stuck with this total loser of a
+liege lord, because how the fuck do you explain that after a battle?
+
+\chapter{fifth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=0pt]{\dropcaps{a}}{nd some sort}
+of wizard wanders into camp, my loser liege lord wants to execute him for
+being a wizard but i convince him to let the wizard stay, because i want
+to do more weather-based strategies and i'm pretty sure having a camp
+wizard can help with that.  after the welcome to the team banquet the wizard
+steals half the treasury and my liege lord's wife and leaves
+
+\chapter{sixth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=-2pt]{\dropcaps{m}}{y loser liege lord}
+sends me to reinforce a city he's taken, but in the confusion of leaving i
+forgot to take the token that would have gotten us into the city, so my men
+have to wait outside the city walls for like eight hours while i ride
+back to get it
+
+\chapter{seventh day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=0pt]{\dropcaps{a}}{nd my loser} liege lord
+finally joins me in the city, it turns out he's actually a pretty cool guy, and
+he isn't even that mad at me for letting the wizard steal his wife. i decide to
+shoot my shot but i'm really nervous and keep on stalling because what if i
+mess up our relationship and by extension jeopardize the security of my men,
+and eventually he just says goodnight and goes back to his room, where an
+assassin is in the process of setting up to kill him
+
+\chapter{eighth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=0pt]{\dropcaps{a}}{nd my loser} liege lord
+tells me to fake defect to his rival warlord, the one i originally wanted to
+ally with, to find out if he was the one who sent the assassin and why.
+but my whole way over to the rival warlord i'm worried that this has something
+to do with the wizard thing or how awkward i made it last night 
+
+\chapter{ninth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, try to tactfully}
+ask my fake liege lord if he sent the assassin to kill my loser liege lord and
+it turns out the idea of using assassins never occurred to him, but now that
+i've suggested it he's really into it. in order to save my loser liege lord i
+volunteer to be the one to kill him
+
+\chapter{tenth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{o}}{n my way back} to my
+loser liege lord's city i realize i won't be able to collect my men from my
+fake liege lord until i bring back my loser liege lord's head. this would have
+been a great thing to think of before i got myself in this situation. i go back
+to my loser liege lord and ask him to rescue my men, and he tells me that if he
+could sack my fake liege lord's camp he already would have. that doesn't change
+the fact that my men are still trapped. they're prisoners, even. i go back to
+my room to sulk
+
+\chapter{eleventh day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, find a little}
+caged pigeon in the rafters of my loser liege lord's room and deduce it
+belonged to the assassin. without asking permission or telling my loser liege
+lord goodbye i let the pigeon loose and follow it north. don't ask what i was
+doing in my loser liege lord's room. it's not important
+
+\chapter{twelfth day\\as a second century warlord}
+
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, disguise myself}
+as a wizard and enter the camp of the coalition leader the pigeon led me to.
+in the middle of my little sleight of hand performance i make eye contact with
+the coalition leader's second-in-command. IT'S THE WIZARD THAT STOLE MY LOSER
+LIEGE LORD'S WIFE. after the banquet i corner the fake wizard and ask him what
+the fuck is going on and he just says ``wouldn't you like to know'' and leaves.
+i don't know what to say to that so i just let him go
+
+\chapter{thirteenth day\\as a second century warlord}
+\lettrine[lhang=0.2,lines=3,findent=0pt]{\dropcaps{I}}{'m honestly so} sick of
+not knowing what's going on, so i adjust my wizard costume to passably disguise
+myself as a woman and break into the women's area of the camp, where sure
+enough my loser liege lord's wife is. i ask her what she's doing here and she
+tells me the fake wizard overheard her singing a poem she overheard on the
+street, not knowing it contains the coalition leader's formation's weaknesses.
+the fake wizard kidnapped her and assigned an assassin to kill her husband
+before they figured out the poem's significance. she shares the first couplet
+with me but i'm discovered and thrown out before she can share any more.
+she doesn't need to. through a bizarre coincidence of homophones, it's the
+poop version of my misinformation nursery rhyme
+
+\chapter{fourteenth day\\as a second century warlord}
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{I}}{\, go back to}
+my loser liege lord and tell him everything, urging him to join with my fake
+liege lord to attack the coalition leader according to the weaknesses in the
+nursery rhyme. he tells me frankly that he doesn't trust me anymore. i ask him
+to execute me if that's really true, because i can't bear to live if i can't
+protect him and i can't protect my men. he agrees to attack the coalition leader
+
+\chapter{fifteenth day\\as a second century warlord}
+\lettrine[lhang=0.2,lines=3,findent=2pt]{\dropcaps{d}}{ue to the} information
+in the nursery rhyme, and thanks to my loser liege lord reminding me of the
+weather conditions multiple times while planning our battle strategy, our
+alliance carries the day. my loser liege lord gets his wife back. my men tell
+me that our fake liege lord actually treated them really well and they'd like
+to stay with him if i don't mind. i do mind, now that neither the men i love
+nor the man i love have any use for me, but i don't tell them that
+
+\chapter{sixteenth day\\as a second century warlord}
+\lettrine[lhang=0.2,lines=3,findent=0pt]{\dropcaps{I}}{'m preparing to}
+leave to i don't know where, maybe to try to become a wizard for real, when my
+loser liege lord stops me and asks me where i'm going. he says he had hoped i
+would continue to work as his advisor. i was unaware i was his advisor in the
+first place. i agree, and he tells me he's truly honored to have me in his
+service at last. he has known i am a rare and talented man with a strategic
+intelligence far above his ever since the day he witnessed me tying branches to
+my horses' tails in six inches of mud, and could not for the life of him figure out why
+
+\end{document}
